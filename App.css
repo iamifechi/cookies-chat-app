@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Oleo+Script&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+body {
+    position: relative;
+    font-family: 'Space Grotesk', sans-serif;
+    font-style: normal;
+    font-size:24px;
+    line-height:1.1;
+    width:100%;
+    /* max-width:1728px; */
+    max-width:1728px;
+    background:#fafafa;
+}
+@media screen and (max-width:1248px){
+    body {
+        font-size:16px;
+    }
+}
+@media screen and (max-width:768px){
+    body {
+        font-size:14px;
+    }
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    cursor:pointer;
+}
+
+h1,h2,h3,p{
+    margin:0;
+    line-height:1.2;
+}
