@@ -1,18 +1,26 @@
-import { useState, /*useRef */} from 'react';
+import { useState, useRef, useEffect } from 'react';
+import {useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import {Section, Form, Header} from './Signin';
+import Cookies from 'universal-cookie';
 
 export default function Chat() {
-    const [conversations, setConversations] = useState([
-        {sender:'Me', message: 'Hi'},
-        {sender:'Friend', message: 'Hello', receiver:true}]);
-    const [message, setMessage] = useState('');
-    // const lstmsg = useRef(null)
+    
+const cookies = new Cookies();
+const user = cookies.get('user');
+const navigate = useNavigate();
+    // const [conversations, setConversations] = useState([
+    //     {sender:user, message: 'Hi'},
+    //     {sender:'Friend', message: 'Hello', receiver:true}]);
+    const [conversations, setConversations] = useState([]);
 
+    const [message, setMessage] = useState('');
+    //const lstmsg = useRef(null)
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newMessage = {sender:'Me', message: message}
+        const newMessage = {sender:user, message: message}
         setConversations(conversations => [...conversations,newMessage])
+        cookies.set('conversation', conversations);
         setMessage('')
     }
 
@@ -20,17 +28,32 @@ export default function Chat() {
     //     lstmsg.current.scrollTop += offset
     // }
 
+    useEffect(()=>{
+        const chatHistory = cookies.get('conversations');
+        console.log('chats', chatHistory)
+        if(chatHistory){
+            setConversations(chatHistory)
+        }
+    },[user])
   return (
     <Wrapper>
-        <Header>Welcome to ZuriChat</Header>
+        <Container>
+            <Header>Welcome <b>{user}</b></Header>
+            <Button id='log-out' 
+            onClick={()=> {
+                cookies.remove('user');
+                cookies.remove('conversations');
+                navigate("/");
+            }}>Log out</Button>
+        </Container>
         <ChatBox>
             {conversations.map((msg,index)=>{
                 return(
                     <Message key={`${index}`} 
-                    right={msg.receiver ? true: false}
+                    right={msg.sender === user ? false : true}
                     /*ref={index===conversations.length-1? {lstmsg} : null}*/
                     >
-                        <h4>{msg.sender}</h4>
+                        <h4>{msg.sender === user ? 'Me': msg.sender}</h4>
                         <p>{msg.message}</p>
                     </Message>
                 )
@@ -47,11 +70,12 @@ export default function Chat() {
 }
 
 const Wrapper = styled(Section)`
-padding:3em 5em;
+padding:2em 5em;
 flex-direction:column;
 justify-content:flex-start;
+align-items:center;
+gap:0;
 `
-
 const Input = styled.input`
 border:1px solid black;
 padding:1em;
@@ -60,7 +84,7 @@ border-radius:5px;
 
 const Button = styled.button`
 background:white;
-border:1px solid black;
+border:1px solid white;
 border-radius:5px;
 &:hover{
     cursor:pointer;
@@ -69,26 +93,44 @@ border-radius:5px;
     background:black;
 }
 `
+const Container = styled.div`
+display:grid;
+grid-template-columns:3fr 1fr;
+justify-content:space-between;
+width:75%;
+min-width:300px;
+margin:0;
+padding:0;
+
+& ${Button}{
+    border:1px solid black;
+    width:fit-content;
+    padding:.5em;
+    margin:0;
+}
+`
+
+
 
 const ChatBox = styled.div`
-height:50vh;
+height:60vh;
 width:75%;
-min-width:370px;
-min-height:500px;
+min-width:300px;
+min-height:400px;
 max-height:700px;
-background:white;
+background:black;
 padding:2em 1em;
 margin:1em 0 0;
 position:relative;
 display:flex;
 flex-direction:column;
 gap:1em;
-overflow-y:scroll;
+overflow-y:auto;
 `
 const InputContainer = styled(Form)`
-background:white;
-width:70%;
-min-width:360px;
+background:black;
+width:75%;
+min-width:300px;
 display:grid;
 grid-template-columns:4fr 1fr;
 padding:0.5em 1em;
@@ -118,9 +160,5 @@ gap:.5em;
     font-size:16px;
     width:100%;
 }
-
-& p{
- 
-    }
 `
 

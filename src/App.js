@@ -1,13 +1,21 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
-import Signin from './components/Signin'
-import Chat from './components/Chat'
+import Signin from './pages/Signin'
+import Chat from './pages/Chat'
+import Authorize from './components/Authorize'
+import Authenticate from './components/Authenticate'
 
 function AppRoutes() {
   const routes = useRoutes([
-    { path: "/", element: <Signin /> },
-    { path: "/chat", element: <Chat /> },
+    {element: <Authorize />,
+    children: [
+      { path: "/chat", element: <Chat/> },
+    ]},
+    {element: <Authenticate />,
+      children: [
+        { path: "/", element: <Signin/> },
+      ]},
     ]);
   return routes;
 }
