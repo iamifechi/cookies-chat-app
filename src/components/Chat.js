@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, /*useRef */} from 'react';
 import styled from 'styled-components';
 import {Section, Form, Header} from './Signin';
 
@@ -7,7 +7,7 @@ export default function Chat() {
         {sender:'Me', message: 'Hi'},
         {sender:'Friend', message: 'Hello', receiver:true}]);
     const [message, setMessage] = useState('');
-    const lstmsg = useRef(null)
+    // const lstmsg = useRef(null)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,9 +16,9 @@ export default function Chat() {
         setMessage('')
     }
 
-    const scroll = (offset) => {
-        lstmsg.current.scrollTop += offset
-    }
+    // const scroll = (offset) => {
+    //     lstmsg.current.scrollTop += offset
+    // }
 
   return (
     <Wrapper>
