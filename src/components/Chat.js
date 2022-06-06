@@ -28,7 +28,7 @@ export default function Chat() {
                 return(
                     <Message key={`${index}`} 
                     right={msg.receiver ? true: false}
-                    ref={index===conversations.length-1? {lstmsg} : null}
+                    /*ref={index===conversations.length-1? {lstmsg} : null}*/
                     >
                         <h4>{msg.sender}</h4>
                         <p>{msg.message}</p>
