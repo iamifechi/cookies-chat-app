@@ -3,6 +3,8 @@ import {useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import {Section, Form, Header} from './Signin';
 import Cookies from 'universal-cookie';
+const bg = '#322e3e'
+
 
 export default function Chat() {
     
@@ -78,6 +80,7 @@ gap:0;
 `
 const Input = styled.input`
 border:1px solid black;
+border-color:${bg};
 padding:1em;
 border-radius:5px;
 `
@@ -85,12 +88,14 @@ border-radius:5px;
 const Button = styled.button`
 background:white;
 border:1px solid white;
+border-color:${bg};
 border-radius:5px;
 &:hover{
     cursor:pointer;
     transform:scale(1.02);
     color:white;
-    background:black;
+    border-color:white;
+    background:${bg};
 }
 `
 const Container = styled.div`
@@ -104,21 +109,27 @@ padding:0;
 
 & ${Button}{
     border:1px solid black;
+    border-color:${bg}
     width:fit-content;
     padding:.5em;
     margin:0;
+    justify-self:flex-end;
+
+    :hover{
+        background:${bg};
+    }
 }
 `
 
 
 
 const ChatBox = styled.div`
-height:60vh;
+height:65vh;
 width:75%;
 min-width:300px;
 min-height:400px;
-max-height:700px;
-background:black;
+max-height:800px;
+background:${bg};
 padding:2em 1em;
 margin:1em 0 0;
 position:relative;
@@ -128,13 +139,14 @@ gap:1em;
 overflow-y:auto;
 `
 const InputContainer = styled(Form)`
-background:black;
+background:${bg};
 width:75%;
 min-width:300px;
 display:grid;
 grid-template-columns:4fr 1fr;
 padding:0.5em 1em;
 z-index:999px;
+
 `
 
 const Message = styled.div`
@@ -161,4 +173,6 @@ gap:.5em;
     width:100%;
 }
 `
+
+
 
