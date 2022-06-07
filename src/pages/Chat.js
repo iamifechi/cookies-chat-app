@@ -24,15 +24,16 @@ const navigate = useNavigate();
         setMessage('')
     }
 
-    // const scroll = (offset) => {
-    //     lstmsg.current.scrollTop += offset
-    // }
-
-    useEffect(()=>{
+    const checkHistory = () => {
         const chatHistory = cookies.get('conversations');
+        console.log('chats', chatHistory)
         if(chatHistory){
             setConversations(chatHistory)
         }
+    }
+
+    useEffect(()=>{
+        checkHistory()
     })
   return (
     <Wrapper>
