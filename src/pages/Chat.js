@@ -30,11 +30,10 @@ const navigate = useNavigate();
 
     useEffect(()=>{
         const chatHistory = cookies.get('conversations');
-        console.log('chats', chatHistory)
         if(chatHistory){
             setConversations(chatHistory)
         }
-    },[user])
+    })
   return (
     <Wrapper>
         <Container>
