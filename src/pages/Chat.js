@@ -109,7 +109,7 @@ padding:0;
 
 & ${Button}{
     border:1px solid black;
-    border-color:${bg}
+    border-color:${bg};
     width:fit-content;
     padding:.5em;
     margin:0;
