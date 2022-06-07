@@ -2,6 +2,9 @@ import styled from 'styled-components'
 import {useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
+import io from "socket.io-client";
+
+
 
 
 export default function Signin() {
@@ -9,14 +12,35 @@ export default function Signin() {
     
     const navigate = useNavigate();
     const [name, setName] = useState('')
+    const [roomname, setroomname] = useState(`${name}- room`)
+   
+
+    // socket
+    const socket = io.connect('/');
+  
+
+    const sendData = () => {
+        if (name !== "" && roomname !== "") {
+          socket.emit("joinRoom", { name, roomname });
+          //if empty error message pops up and returns to the same page
+        } else {
+          alert("name and roomname are must !");
+          window.location.reload();
+        }
+      };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         cookies.set('user', name, { path: '/' });
+        cookies.set('room', roomname, { path: '/' });
+        sendData();
         navigate("/chat");
     }
+    
 
     useEffect(()=>{
         console.log('user', cookies.get('user'))
+
     })
 
   return (

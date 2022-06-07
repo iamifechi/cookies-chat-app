@@ -1,42 +1,64 @@
-import { useState, /*useRef,*/ useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import {Section, Form, Header} from './Signin';
 import Cookies from 'universal-cookie';
+import io from "socket.io-client";
 const bg = '#322e3e'
 
 
 export default function Chat() {
+const socket = io.connect('/');
     
 const cookies = new Cookies();
 const user = cookies.get('user');
 const navigate = useNavigate();
-    // const [conversations, setConversations] = useState([
-    //     {sender:user, message: 'Hi'},
-    //     {sender:'Friend', message: 'Hello', receiver:true}]);
-    const [conversations, setConversations] = useState([]);
+     const [conversations, setConversations] = useState([]);
 
     const [message, setMessage] = useState('');
-    //const lstmsg = useRef(null)
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const newMessage = {sender:user, message: message}
-        setConversations(conversations => [...conversations,newMessage])
-        cookies.set('conversation', conversations);
-        setMessage('')
-    }
 
     const checkHistory = () => {
         const chatHistory = cookies.get('conversations');
         console.log('chats', chatHistory)
         if(chatHistory){
-            setConversations(chatHistory)
-        }
+            setConversations(chatHistory);
+           // return chatHistory;
+        };
+    }
+    const getUser = () => {
+        let user = cookies.get('user');
+        return user
     }
 
     useEffect(()=>{
         checkHistory()
-    })
+    });
+    useEffect(()=>{
+        let user = getUser();
+        socket.on("message", (data) => {
+            const newMessage = {sender:user, message: message}
+            setConversations(conversations => [...conversations,newMessage])
+          });
+    }, [socket]);
+
+    const lstMsg = useRef(null);
+
+    const scrollToBottom = () => {
+        lstMsg.current.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(scrollToBottom, [conversations]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const newMessage = {sender:user, message: message};
+        socket.emit("chat", newMessage);
+        setConversations(conversations => [...conversations,newMessage])
+        cookies.set('conversation', conversations);
+        setMessage('')
+    }
+
+    console.log(conversations, "convo");
   return (
     <Wrapper>
         <Container>
@@ -53,7 +75,7 @@ const navigate = useNavigate();
                 return(
                     <Message key={`${index}`} 
                     right={msg.sender === user ? false : true}
-                    /*ref={index===conversations.length-1? {lstmsg} : null}*/
+                    ref={index===conversations.length-1? {lstMsg} : null}
                     >
                         <h4>{msg.sender === user ? 'Me': msg.sender}</h4>
                         <p>{msg.message}</p>
@@ -173,6 +195,4 @@ gap:.5em;
     width:100%;
 }
 `
-
-
 
