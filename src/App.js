@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import socketClient  from "socket.io-client"
+//import socketClient  from "socket.io-client"
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 import Signin from './pages/Signin'
 import Chat from './pages/Chat'
